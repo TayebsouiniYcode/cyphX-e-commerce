@@ -1,0 +1,755 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BookSwap REST API",
+        "description": "API pédagogique locale sans authentification. Les opérations d’écriture sont réservées au développement local.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Lister les catégories",
+                "operationId": "bb36d1f4ba7a31249887d38c4c828d7d",
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/tags": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Lister les tags",
+                "operationId": "703c5d778e775d18d2f2517ef501c79c",
+                "responses": {
+                    "200": {
+                        "description": "Liste des tags"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Lister les livres",
+                "operationId": "2af139245da32a4ec3e5177831083726",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/books/{id}": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Afficher un livre",
+                "operationId": "442159c8bd2f19cea8bbb212ed32d58c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Livre"
+                    },
+                    "404": {
+                        "description": "Introuvable"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/exchange-requests": {
+            "get": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Lister et filtrer les demandes",
+                "operationId": "f8b060d813da0fbd01ca7bbb4f95610b",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "exchange_type",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "permanent",
+                                "temporary"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "category_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "open",
+                                "closed",
+                                "cancelled"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "newest",
+                                "oldest"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée"
+                    },
+                    "422": {
+                        "description": "Filtres invalides"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Créer une demande (local uniquement)",
+                "operationId": "7e7d0c81332dc0411eed609a447fdb65",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeRequestInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Créée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/exchange-requests/{id}": {
+            "get": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Afficher une demande",
+                "operationId": "c7d65048706e6a99e46bcf3212ce1f9a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Demande et offres"
+                    },
+                    "404": {
+                        "description": "Introuvable"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Remplacer une demande",
+                "operationId": "26a76ba77ae4f80033e5f26ae519928c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeRequestInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Modifiée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Supprimer une demande",
+                "operationId": "6fe47035405dfdac75be95fa02d684ea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Supprimée"
+                    },
+                    "404": {
+                        "description": "Introuvable"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Exchange Requests"
+                ],
+                "summary": "Modifier partiellement une demande",
+                "operationId": "ea01e1a21d9ea62049c583b392c63f41",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeRequestInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Modifiée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/exchange-requests/{id}/offers": {
+            "get": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Lister les offres d’une demande",
+                "operationId": "4c53f46b0653b7338fba400ff13d7200",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Créer une offre (local uniquement)",
+                "operationId": "9fcbadf29c73eb81a1823185312e1c37",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeOfferInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Créée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        },
+        "/api/v1/exchange-offers/{id}": {
+            "get": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Afficher une offre",
+                "operationId": "0a8f6e479f06e66685fbfce84640d4e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Offre"
+                    },
+                    "404": {
+                        "description": "Introuvable"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Remplacer une offre",
+                "operationId": "b7fa3c832b8758d0a247ca25e7c80c53",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeOfferInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Modifiée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Supprimer une offre",
+                "operationId": "41d7db71f5a0286760c80e159e24d802",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Supprimée"
+                    },
+                    "404": {
+                        "description": "Introuvable"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Exchange Offers"
+                ],
+                "summary": "Modifier partiellement une offre",
+                "operationId": "1717855071ff44fc28833184416d44fa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExchangeOfferInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Modifiée"
+                    },
+                    "422": {
+                        "description": "Validation"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "http://127.0.0.1:8000",
+                        "description": "Serveur local"
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Yassine Amrani"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "avatar": {
+                        "type": "string"
+                    },
+                    "group_name": {
+                        "type": "string",
+                        "example": "CyphX A"
+                    }
+                },
+                "type": "object"
+            },
+            "Book": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Clean Code"
+                    },
+                    "author": {
+                        "type": "string",
+                        "example": "Robert C. Martin"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "example": "/images/books/book-1.svg"
+                    },
+                    "category": {
+                        "type": "object"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ExchangeRequestInput": {
+                "required": [
+                    "user_id",
+                    "book_id",
+                    "exchange_type",
+                    "status"
+                ],
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "book_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "exchange_type": {
+                        "type": "string",
+                        "enum": [
+                            "permanent",
+                            "temporary"
+                        ]
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "open",
+                            "closed",
+                            "cancelled"
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "ExchangeOfferInput": {
+                "required": [
+                    "user_id",
+                    "offered_book_id",
+                    "exchange_type",
+                    "status"
+                ],
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "offered_book_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "exchange_type": {
+                        "type": "string",
+                        "enum": [
+                            "permanent",
+                            "temporary"
+                        ]
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date",
+                        "nullable": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "accepted",
+                            "rejected"
+                        ]
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Books"
+        },
+        {
+            "name": "Categories"
+        },
+        {
+            "name": "Tags"
+        },
+        {
+            "name": "Exchange Requests"
+        },
+        {
+            "name": "Exchange Offers"
+        }
+    ]
+}
